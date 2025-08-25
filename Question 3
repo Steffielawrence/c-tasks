@@ -1,0 +1,41 @@
+Question 3 : Smart meter statistics
+
+using System;
+
+class SmartMeterStatistics
+{
+    enum Day { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+
+    static void Main()
+    {
+        int[] units = new int[7];
+
+        Console.WriteLine("Enter units for each day (Mon-Sun): ");
+        string[] input = Console.ReadLine().Split(' ');
+
+        for (int i = 0; i < 7; i++)
+        {
+            units[i] = Convert.ToInt32(input[i]);
+        }
+
+        int total = 0;
+        int maxUnits = units[0];
+        int maxIndex = 0;
+
+        for (int i = 0; i < 7; i++)
+        {
+            total += units[i];
+            if (units[i] > maxUnits)
+            {
+                maxUnits = units[i];
+                maxIndex = i;
+            }
+        }
+
+        double average = (double)total / 7;
+
+        Console.WriteLine($"Total units: {total}");
+        Console.WriteLine($"Average units/day: {average:F2}");
+        Console.WriteLine($"Highest consumption: {(Day)maxIndex} ({maxUnits} units)");
+    }
+}
