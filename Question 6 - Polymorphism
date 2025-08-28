@@ -1,0 +1,33 @@
+// Question 6 - Polymorphism
+
+using System;
+abstract class MeterReading
+{
+    public int Units { get; set; }
+    public abstract int CalculateBill();
+}
+class ResidentialReading : MeterReading
+{
+    public override int CalculateBill()
+    {
+        return Units * 5;
+    }
+}
+class CommercialReading : MeterReading
+{
+    public override int CalculateBill()
+    {
+        return Units * 8;
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        ResidentialReading r = new ResidentialReading { Units = 100 };
+        Console.WriteLine($"Residential Bill = {r.CalculateBill()}");
+
+        CommercialReading c = new CommercialReading { Units = 100 };
+        Console.WriteLine($"Commercial Bill = {c.CalculateBill()}");
+    }
+}
