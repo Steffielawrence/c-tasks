@@ -1,0 +1,143 @@
+Question 8
+
+using System;
+using System.Collections.Generic;
+enum MeterStatus { Active, Inactive, Fault }
+struct Reading
+{
+    public DateTime Date;
+    public int Units;
+
+    public Reading(DateTime date, int units)
+    {
+        Date = date;
+        Units = units;
+    }
+}
+
+abstract class Notifier
+{
+    public abstract void SendMessage(string msg);
+}
+
+class SmsNotifier : Notifier
+{
+    private string phone;
+    public SmsNotifier(string phone) { this.phone = phone; }
+    public override void SendMessage(string msg)
+    {
+        Console.WriteLine($"[SMS to {phone}] {msg}");
+    }
+}
+
+class EmailNotifier : Notifier
+{
+    private string email;
+    public EmailNotifier(string email) { this.email = email; }
+    public override void SendMessage(string msg)
+    {
+        Console.WriteLine($"[Email to {email}] {msg}");
+    }
+}
+
+static class Tariff
+{
+    public static decimal RatePerUnit = 5.0m;
+}
+
+sealed class BillCalculator
+{
+    public decimal CalculateBill(int totalUnits)
+    {
+        return totalUnits * Tariff.RatePerUnit;
+    }
+}
+
+partial class Customer
+{
+    public string Name { get; set; }
+}
+
+partial class Customer
+{
+    public string? Email { get; set; }
+    public string? Phone { get; set; }
+
+    public Notifier GetNotifier()
+    {
+        return (Email ?? "") != "" ? new EmailNotifier(Email) : new SmsNotifier(Phone ?? "Unknown");
+    }
+}
+
+class Meter
+{
+    public int Id { get; set; }
+    public MeterStatus Status { get; set; }
+    public event Action<Reading>? OnNewReading;
+
+    private List<Reading> readings = new List<Reading>();
+
+    public void AddReading(int units)
+    {
+        var reading = new Reading(DateTime.Now, units);
+        readings.Add(reading);
+        OnNewReading?.Invoke(reading);
+    }
+
+    public int GetTotalUnits()
+    {
+        int total = 0;
+        foreach (var r in readings) total += r.Units;
+        return total;
+    }
+
+  
+    public class ReadingHistory
+    {
+        private List<Reading> history;
+        public ReadingHistory(List<Reading> readings) { history = readings; }
+
+        public void ShowHistory()
+        {
+            Console.WriteLine("\n--- Reading History ---");
+            foreach (var r in history)
+            {
+                Console.WriteLine($"{r.Date}: {r.Units} units");
+            }
+        }
+    }
+
+    public ReadingHistory GetHistory() => new ReadingHistory(readings);
+}
+
+class Program
+{
+    static void Main()
+    {
+        
+        Customer cust1 = new Customer { Name = "Steffie", Phone = "9876543210" };
+
+        Customer cust2 = new Customer { Name = "John", Email = "john@example.com" };
+
+        Meter meter = new Meter { Id = 1, Status = MeterStatus.Active };
+
+        meter.OnNewReading += (reading) =>
+        {
+            var notifier = cust1.GetNotifier();  
+            notifier.SendMessage($"New Reading Added: {reading.Units} units on {reading.Date}");
+        };
+
+    
+        meter.AddReading(50);
+        meter.AddReading(70);
+
+    
+        var history = meter.GetHistory();
+        history.ShowHistory();
+
+        
+        BillCalculator billCalc = new BillCalculator();
+        decimal bill = billCalc.CalculateBill(meter.GetTotalUnits());
+        Console.WriteLine($"\nTotal Bill for {cust1.Name}: ₹{bill}");
+    }
+}
