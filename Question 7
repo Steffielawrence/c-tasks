@@ -1,0 +1,82 @@
+Question 7
+
+sing System;
+using System.Collections.Generic;
+class Program
+{
+    static void Main()
+    {
+        List<List<int>> meterReadings = new List<List<int>>
+        {
+            new List<int> {10, 20, 30},
+            new List<int> {15, 25, 35},
+            new List<int> {18, 28, 38},
+            new List<int> {12, 22, 32},
+            new List<int> {14, 24, 34},
+            new List<int> {16, 26, 36},
+            new List<int> {19, 29, 39}
+        };
+        Console.WriteLine("Night reading of Day 3: " + meterReadings[2][2]);
+
+        Dictionary<string, Dictionary<string, List<int>>> areaData =
+            new Dictionary<string, Dictionary<string, List<int>>>
+        {
+            { "Area1", new Dictionary<string, List<int>>
+                {
+                    { "House1", new List<int> { 100, 200, 300, 400, 500, 600, 700 } },
+                    { "House2", new List<int> { 150, 250, 350, 450, 550, 650, 750 } }
+                }
+            },
+            { "Area2", new Dictionary<string, List<int>>
+                {
+                    { "House3", new List<int> { 110, 210, 310, 410, 510, 610, 710 } }
+                }
+            }
+        };
+        Console.WriteLine("Readings of House2 in Area1:");
+        foreach (var reading in areaData["Area1"]["House2"])
+        {
+            Console.Write(reading + " ");
+        }
+        Console.WriteLine();
+
+        Dictionary<string, List<string>> areaMeters = new Dictionary<string, List<string>>
+        {
+            { "Area1", new List<string> { "Meter1", "Meter2", "Meter3" } },
+            { "Area2", new List<string> { "Meter4", "Meter5" } }
+        };
+        Console.WriteLine("Meters in Area1:");
+        foreach (var meter in areaMeters["Area1"])
+        {
+            Console.WriteLine(meter);
+        }
+
+        List<Dictionary<string, string>> complaints = new List<Dictionary<string, string>>
+        {
+            new Dictionary<string, string>
+            {
+                { "HouseNumber", "House1" },
+                { "MeterNumber", "Meter1" },
+                { "Issue", "Meter not working" },
+                { "Date", "2025-08-25" }
+            },
+            new Dictionary<string, string>
+            {
+                { "HouseNumber", "House2" },
+                { "MeterNumber", "Meter3" },
+                { "Issue", "High reading" },
+                { "Date", "2025-08-26" }
+            }
+        };
+        Console.WriteLine("Complaints:");
+        foreach (var complaint in complaints)
+        {
+            Console.WriteLine($"House: {complaint["HouseNumber"]}, Meter: {complaint["MeterNumber"]}, Issue: {complaint["Issue"]}, Date: {complaint["Date"]}");
+        }
+    }
+}
+
+
+
+
+
