@@ -1,0 +1,31 @@
+using System;
+using System.IO;
+
+class FileHandlingDemo
+{
+    static void Main()
+    {
+        string filePath = "favorites.txt";
+
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            Console.WriteLine("Enter 5 favorite colors:");
+            for (int i = 1; i <= 5; i++)
+            {
+                Console.Write($"Color {i}: ");
+                string color = Console.ReadLine();
+                writer.WriteLine(color);
+            }
+        }
+
+        Console.WriteLine("\nYour favorite colors are:");
+        using (StreamReader reader = new StreamReader(filePath))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+            }
+        }
+    }
+}
